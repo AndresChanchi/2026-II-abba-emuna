@@ -23,7 +23,7 @@ stellar-xdr 27.0.0 (5262803470be965e42f80023d12fba12808c774a)
 xdr (68fa1ac55692f68ad2a2ca549d0a283273554439)
 ```
 
-## 2. hello_world en testnet
+## 2. Mínimo · paso 2: hello_world en testnet
 
 | Dato | Valor |
 |---|---|
@@ -34,7 +34,23 @@ xdr (68fa1ac55692f68ad2a2ca549d0a283273554439)
 | Hash del invoke de `hello` | `<64 caracteres hexadecimales>` |
 | Resultado del invoke | `["Hello","Javeriana"]` |
 
-## 3. Comandos que usamos
+## 3. Reto · paso 5: frontend de Hello World
+
+Opcional. Llénalo si llegaste al paso 5 del Getting Started: los pasos 3 y 4 despliegan el contrato `increment` y el paso 5 conecta un frontend al contrato.
+
+| Dato | Valor |
+|---|---|
+| Contract ID de `increment` | `<C…>` |
+| Enlace en stellar.expert | https://stellar.expert/explorer/testnet/contract/<Contract ID> |
+| Comando con el que corre el frontend | `<el comando que usaste, por ejemplo npm run dev>` |
+
+Captura del frontend corriendo en tu computador: súbela a esta misma carpeta con el nombre `frontend.png` y pega aquí esta línea para que se vea en GitHub:
+
+```markdown
+![Frontend de Hello World](frontend.png)
+```
+
+## 4. Comandos que usamos
 
 ```bash
 # Crear el proyecto y compilar
@@ -57,9 +73,22 @@ stellar contract invoke --id hello_world --source-account ejemplo-ana \
 
 > 💡 **¿Por qué `--send=yes`?** `hello` solo lee, no escribe nada. Sin esa opción la CLI simula la llamada, te muestra el resultado y **no** envía transacción, así que no hay hash que pegar.
 
-## 4. Revisión antes del PR
+Si hiciste el reto, agrega aquí los comandos que usaste en los pasos 3 a 5:
+
+```bash
+<pega aquí los comandos del reto>
+```
+
+## 5. Revisión antes del PR
+
+Mínimo:
 
 - [ ] Las versiones están pegadas como texto, con el comando arriba de cada una.
 - [ ] El Contract ID empieza por `C` y el enlace de stellar.expert abre el contrato.
 - [ ] El hash tiene 64 caracteres y aparece en stellar.expert al buscarlo.
 - [ ] No hay llaves secretas (`S…`) en ningún archivo.
+
+Reto (opcional):
+
+- [ ] El Contract ID de `increment` abre en stellar.expert.
+- [ ] `frontend.png` está en esta carpeta y se ve en la vista previa de GitHub.
