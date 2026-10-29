@@ -1,0 +1,15 @@
+# Rust / Soroban
+target/
+Cargo.lock
+
+# Entornos y secretos (Stellar)
+.env
+.env.*
+*.pem
+*.key
+.stellar/
+
+# Node / Bun (para el frontend que viene)
+node_modules/
+dist/
+.DS_Store
