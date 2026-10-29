@@ -4,3 +4,12 @@ target
 # Local settings
 .soroban
 .stellar
+
+# Frontend (Bun / Astro)
+node_modules/
+dist/
+
+# environ..
+
+.env
+.env.local
