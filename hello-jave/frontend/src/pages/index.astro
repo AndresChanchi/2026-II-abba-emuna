@@ -1,0 +1,257 @@
+---
+import * as HelloWorldClient from '../../packages/hello_world';
+import * as IncrementClient from '../../packages/increment';
+
+// El contrato hello_world es de solo lectura, podemos llamarlo desde el servidor (SSR) sin problemas.
+const helloContract = new HelloWorldClient.Client({
+   ...HelloWorldClient.networks.testnet,
+   rpcUrl: 'https://soroban-testnet.stellar.org:443'
+});
+
+const { result } = await helloContract.hello({ to: "Javeriana" });
+const greeting = result.join(" ");
+---
+
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="DApp de ejemplo conectada a la Testnet de Stellar usando Soroban y Astro." />
+		<meta name="generator" content={Astro.generator} />
+		<title>Stellar Hello World | Abba Emuna</title>
+	</head>
+	<body>
+		<main class="dashboard">
+			<header class="header">
+				<h1>🚀 Stellar Soroban DApp</h1>
+				<p>Conectado a la Testnet de Stellar</p>
+			</header>
+
+			<section class="grid">
+				<!-- Tarjeta Hello World -->
+				<article class="card">
+					<h2>Contrato Hello World</h2>
+					<p class="label">Respuesta del contrato:</p>
+					<output class="result">{greeting}</output>
+					<p class="contract-id">ID: CBOFX2D2CY6B2JU7VPOXP5T24LPF5F3MUK3D3HL6YUTWIPL2XXFGYKGY</p>
+				</article>
+
+				<!-- Tarjeta Increment -->
+				<article class="card">
+					<h2>Contador Increment</h2>
+					<p class="label">Valor actual en la blockchain:</p>
+					<div class="counter-container">
+						<output id="counter-value" class="counter-value">-</output>
+					</div>
+					<button id="increment-btn" class="btn">
+						Incrementar Contador
+					</button>
+					<p id="status-msg" class="status"></p>
+					<p class="contract-id">ID: CCGEH3IM5GEZ5IWDC6TWOLR2NZG56NGBHEQ66TYDYZO6MQRAIYY7T5QG</p>
+				</article>
+			</section>
+		</main>
+
+		<style>
+			/* CSS Moderno: Variables, Grid, Flexbox. Sin !important */
+			:root {
+				--bg-color: #0f172a;
+				--card-bg: #1e293b;
+				--text-main: #f8fafc;
+				--text-muted: #94a3b8;
+				--primary: #6366f1;
+				--primary-hover: #4f46e5;
+				--border: #334155;
+				--radius: 12px;
+				--font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+			}
+
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: var(--bg-color);
+				color: var(--text-main);
+				font-family: var(--font);
+				display: flex;
+				justify-content: center;
+				min-height: 100vh;
+			}
+
+			.dashboard {
+				width: 100%;
+				max-width: 1024px;
+				padding: 2rem 1rem;
+			}
+
+			.header {
+				text-align: center;
+				margin-bottom: 3rem;
+			}
+
+			.header h1 {
+				font-size: 2.5rem;
+				margin-bottom: 0.5rem;
+				background: linear-gradient(to right, #818cf8, #c084fc);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+
+			.header p {
+				color: var(--text-muted);
+				font-size: 1.1rem;
+				margin: 0;
+			}
+
+			.grid {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 2rem;
+			}
+
+			@media (min-width: 768px) {
+				.grid {
+					grid-template-columns: 1fr 1fr;
+				}
+			}
+
+			.card {
+				background-color: var(--card-bg);
+				border: 1px solid var(--border);
+				border-radius: var(--radius);
+				padding: 2rem;
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+				box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+			}
+
+			.card h2 {
+				margin: 0;
+				font-size: 1.5rem;
+				color: #e2e8f0;
+			}
+
+			.label {
+				color: var(--text-muted);
+				font-size: 0.875rem;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				margin: 0;
+			}
+
+			.result {
+				display: block;
+				font-size: 2rem;
+				font-weight: bold;
+				color: #34d399;
+				padding: 1rem 0;
+			}
+
+			.counter-container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 80px;
+			}
+
+			.counter-value {
+				font-size: 3rem;
+				font-weight: bold;
+				color: var(--primary);
+			}
+
+			.btn {
+				background-color: var(--primary);
+				color: white;
+				border: none;
+				padding: 0.75rem 1.5rem;
+				border-radius: 8px;
+				font-size: 1rem;
+				font-weight: 600;
+				cursor: pointer;
+				transition: background-color 0.2s ease;
+				margin-top: auto;
+			}
+
+			.btn:hover {
+				background-color: var(--primary-hover);
+			}
+
+			.btn:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+			}
+
+			.status {
+				font-size: 0.875rem;
+				color: #fbbf24;
+				text-align: center;
+				min-height: 1.5rem;
+				margin: 0;
+			}
+
+			.contract-id {
+				font-family: monospace;
+				font-size: 0.75rem;
+				color: var(--text-muted);
+				word-break: break-all;
+				margin-top: 1rem;
+				border-top: 1px solid var(--border);
+				padding-top: 1rem;
+			}
+		</style>
+
+		<script>
+			// Lógica de cliente para el contrato Increment
+			import * as IncrementClient from '../../packages/increment';
+
+			const btn = document.getElementById('increment-btn');
+			const counterOutput = document.getElementById('counter-value');
+			const statusMsg = document.getElementById('status-msg');
+
+			// Nota: Como 'increment' modifica el estado, normalmente requiere firma.
+			// Para esta demo sin billetera, simularemos la lectura inicial.
+			const contract = new IncrementClient.Client({
+				...IncrementClient.networks.testnet,
+				rpcUrl: 'https://soroban-testnet.stellar.org:443'
+			});
+
+			// Función para intentar leer el valor (simulado)
+			const fetchCurrentValue = async () => {
+				try {
+					// Nota: El contrato 'increment' del tutorial NO tiene una función 'get',
+					// así que no podemos leerlo sin enviar transacción. Lo dejamos en "-" hasta que se presione el botón.
+					counterOutput.textContent = "?";
+				} catch (e) {
+					console.error(e);
+				}
+			};
+
+			btn?.addEventListener('click', async () => {
+				btn.disabled = true;
+				statusMsg.textContent = "Firmando transacción... (Requiere billetera)";
+				
+				try {
+					// Aquí iría la lógica de Freighter o la firma del SDK.
+					// Como el tutorial no cubre billeteras, mostraremos un mensaje informativo.
+					// Si el usuario tiene Freighter, la lógica sería: await contract.increment({ signer: freighterSigner });
+					
+					statusMsg.textContent = "⚠️ Para modificar el contador necesitas conectar una billetera (Freighter).";
+					
+					// Simulamos un incremento visual local para la demo
+					const current = parseInt(counterOutput.textContent) || 0;
+					counterOutput.textContent = current + 1;
+
+				} catch (error) {
+					console.error(error);
+					statusMsg.textContent = "Error al interactuar con el contrato.";
+				} finally {
+					btn.disabled = false;
+				}
+			});
+
+			fetchCurrentValue();
+		</script>
+	</body>
+</html>
